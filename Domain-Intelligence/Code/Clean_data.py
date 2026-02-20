@@ -1,14 +1,5 @@
 """
-clean_data.py
-=============
-Battery Consultant AI – Data Cleaning Pipeline
------------------------------------------------
-Reads  : Domain-Intelligence/Dataset/battery.csv
-Writes : Domain-Intelligence/Dataset/clean_battery.csv
-
-Run inside the project virtual environment:
-    source .venv/bin/activate
-    python Domain-Intelligence/Code/clean_data.py
+make the battery.csv a bit clean for AI consultant.
 """
 
 import os
@@ -17,9 +8,7 @@ import logging
 import pandas as pd
 import numpy as np
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
+
 BASE_DIR    = os.path.dirname(                          # Battery-Consultant-AI (repo root)
                   os.path.dirname(                      # Domain-Intelligence
                       os.path.dirname(                  # Code
@@ -28,26 +17,18 @@ DATASET_DIR = os.path.join(BASE_DIR, "Domain-Intelligence", "Dataset")
 INPUT_CSV   = os.path.join(DATASET_DIR, "battery.csv")
 OUTPUT_CSV  = os.path.join(DATASET_DIR, "clean_battery.csv")
 
-# Core columns that MUST have a value – rows missing any of these are dropped
+
 REQUIRED_COLS = ["property", "name", "value", "doi"]
 
-# Columns to fill with a placeholder instead of dropping
 FILLABLE_COLS = ["warning", "tag", "info", "type"]
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)-7s  %(message)s",
     datefmt="%H:%M:%S",
 )
 log = logging.getLogger(__name__)
-
-
-# ---------------------------------------------------------------------------
-# Helper utilities
-# ---------------------------------------------------------------------------
 
 def _section(title: str) -> None:
     """Print a visible section separator to the log."""
@@ -63,10 +44,7 @@ def _null_report(df: pd.DataFrame, label: str) -> None:
         if n:
             log.info("  %-20s  %d", col, n)
 
-
-# ---------------------------------------------------------------------------
 # Pipeline steps
-# ---------------------------------------------------------------------------
 
 def load(path: str) -> pd.DataFrame:
     _section("STEP 1 – Load CSV")
@@ -218,10 +196,7 @@ def export(df: pd.DataFrame, path: str) -> None:
     log.info("Columns: %d  →  %s", len(df.columns), list(df.columns))
     log.info("Size   : %.2f MB", size_mb)
 
-
-# ---------------------------------------------------------------------------
 # Summary
-# ---------------------------------------------------------------------------
 
 def print_summary(df_raw: pd.DataFrame, df_clean: pd.DataFrame) -> None:
     _section("CLEANING SUMMARY")
@@ -234,10 +209,7 @@ def print_summary(df_raw: pd.DataFrame, df_clean: pd.DataFrame) -> None:
     kept_pct = 100.0 * len(df_clean) / len(df_raw) if len(df_raw) else 0
     log.info("Rows retained: %.1f%%", kept_pct)
 
-
-# ---------------------------------------------------------------------------
 # Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
     if not os.path.exists(INPUT_CSV):
